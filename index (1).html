@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prénom Nom — Graphiste DA</title>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;500;600;700;900&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#091D20;
+  --bg2:#0d2528;
+  --fg:#FFD4F9;
+  --fg2:rgba(255,212,249,0.4);
+  --fg3:rgba(255,212,249,0.07);
+  --line:rgba(255,212,249,0.1);
+  --g:'Darker Grotesque',sans-serif;
+  --s:'Spectral',serif;
+}
+
+/* ── CURSEUR ── */
+*{ cursor:none !important; }
+#cur{
+  position:fixed; z-index:9999; pointer-events:none;
+  width:6px; height:6px;
+  background:var(--fg);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+#cur-r{
+  position:fixed; z-index:9998; pointer-events:none;
+  width:28px; height:28px;
+  border:1px solid rgba(255,212,249,0.35);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+#cur.h{ width:3px; height:3px; }
+#cur-r.h{ width:44px; height:44px; border-color:var(--fg); }
+
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--g);
+  font-size:15px;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--fg3) 1px,transparent 1px),
+    linear-gradient(90deg,var(--fg3) 1px,transparent 1px);
+  background-size:24px 24px;
+  opacity:.5;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 40px; height:52px;
+  border-bottom:1px solid var(--line);
+  background:rgba(9,29,32,0.9);
+  backdrop-filter:blur(16px);
+}
+.nav-logo{ font-size:11px; font-weight:700; letter-spacing:4px; text-transform:uppercase; }
+.nav-right{ display:flex; align-items:center; gap:36px; }
+.nav-links{ display:flex; gap:28px; }
+.nav-links a{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); text-decoration:none; transition:color .2s; }
+.nav-links a:hover{ color:var(--fg); }
+.nav-status{ display:flex; align-items:center; gap:7px; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--fg2); }
+.nav-dot{ width:5px; height:5px; border-radius:50%; background:var(--fg); box-shadow:0 0 6px var(--fg); animation:blink 2.4s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ── HERO ── */
+.hero{
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:grid; grid-template-rows:1fr auto;
+  padding-top:52px;
+  border-bottom:1px solid var(--line);
+}
+.hero-main{
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:60px 40px 0;
+}
+.hero-tag{
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--fg2); margin-bottom:28px;
+  display:flex; align-items:center; gap:12px;
+}
+.hero-tag::before{ content:''; display:block; width:24px; height:1px; background:var(--fg2); }
+
+.hero-title{
+  font-family:var(--s);
+  font-size:clamp(52px,8vw,100px);
+  font-weight:300; font-style:italic;
+  line-height:.95; letter-spacing:-2px;
+  color:var(--fg);
+}
+/* ← CHANGEMENT : le mot fort en Darker Grotesque plein, sans stroke */
+.hero-title strong{
+  font-family:var(--g);
+  font-style:normal;
+  font-weight:900;
+  letter-spacing:-4px;
+  color:var(--fg);
+  display:block;
+}
+
+.hero-bottom{
+  display:grid; grid-template-columns:1fr 1fr 1fr 1fr;
+  border-top:1px solid var(--line);
+  margin-top:48px;
+}
+.hero-cell{ padding:18px 40px; border-right:1px solid var(--line); }
+.hero-cell:last-child{ border-right:none; }
+.hero-cell-label{ font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2); margin-bottom:5px; }
+.hero-cell-value{ font-size:13px; font-weight:600; letter-spacing:.3px; }
+.hero-scroll-hint{
+  font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2);
+  display:flex; align-items:center; gap:8px; padding:18px 40px;
+  border-right:1px solid var(--line);
+  animation:pulse 2s infinite;
+}
+.hero-scroll-hint::after{ content:'↓'; }
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* ── DECO LINE ── */
+.deco-line{
+  position:relative; z-index:1;
+  height:1px; background:var(--line); overflow:hidden;
+}
+.deco-line span{
+  display:block; height:1px; width:160px;
+  background:linear-gradient(90deg,transparent,var(--fg),transparent);
+  animation:scan 5s linear infinite;
+}
+@keyframes scan{ from{margin-left:-160px} to{margin-left:100%} }
+
+/* ── SECTION ── */
+section{ position:relative; z-index:1; padding:72px 40px; border-bottom:1px solid var(--line); }
+.s-header{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:52px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+.s-num{ font-size:9px; letter-spacing:2px; color:var(--fg2); font-weight:600; }
+.s-label{ font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2); }
+
+/* ── PROJECTS ── */
+/* Grille : liste à gauche numérotée, preview à droite au hover */
+.projects-wrap{ display:grid; grid-template-columns:1fr 380px; gap:0; align-items:start; }
+
+.projects-list{ border-top:1px solid var(--line); }
+.proj{
+  display:grid; grid-template-columns:64px 1fr auto;
+  align-items:center; gap:24px;
+  padding:20px 0; border-bottom:1px solid var(--line);
+  position:relative;
+  transition:padding-left .2s;
+}
+.proj:hover{ padding-left:8px; }
+.proj:hover .proj-arrow{ color:var(--fg); transform:translate(3px,-3px); }
+.proj:hover .proj-num{ color:var(--fg); }
+.proj-num{ font-size:10px; letter-spacing:2px; color:var(--fg2); font-weight:600; transition:color .2s; }
+.proj-info{ display:flex; flex-direction:column; gap:3px; }
+.proj-title{ font-size:20px; font-weight:700; letter-spacing:-.3px; line-height:1.1; }
+.proj-meta{ font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--fg2); display:flex; gap:12px; }
+.ptag{ font-size:9px; letter-spacing:1.5px; text-transform:uppercase; border:1px solid var(--line); border-radius:2px; padding:2px 8px; color:var(--fg2); }
+.proj-arrow{ font-size:14px; color:var(--fg2); transition:transform .2s, color .2s; }
+
+/* ← CHANGEMENT : cadre preview sticky à droite */
+.preview-box{
+  position:sticky; top:80px;
+  margin-left:40px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  overflow:hidden;
+  aspect-ratio:4/3;
+  background:var(--bg2);
+  display:flex; align-items:center; justify-content:center;
+}
+.preview-box img{
+  width:100%; height:100%; object-fit:cover;
+  opacity:0; transition:opacity .3s;
+}
+.preview-placeholder{
+  display:flex; flex-direction:column; align-items:center; gap:12px;
+  color:var(--fg2); font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  position:absolute;
+}
+.preview-placeholder-icon{
+  width:32px; height:32px; border:1px solid var(--line); border-radius:2px;
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+}
+.preview-label{
+  position:absolute; bottom:12px; left:12px;
+  font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2);
+  background:rgba(9,29,32,.8); padding:4px 10px; border-radius:2px;
+  border:1px solid var(--line);
+  opacity:0; transition:opacity .3s;
+}
+
+/* ── ABOUT ── */
+/* ← CHANGEMENT : texte bio + formation, pas de skills bars */
+.about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:80px; }
+.about-statement{
+  font-family:var(--s); font-style:italic;
+  font-size:clamp(22px,2.8vw,32px); font-weight:300;
+  line-height:1.3; letter-spacing:-.3px;
+  margin-bottom:32px;
+}
+.about-body{ font-size:14px; color:var(--fg2); line-height:1.85; margin-bottom:20px; }
+
+.formation{ display:flex; flex-direction:column; gap:0; padding-top:4px; }
+.formation-title{ font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2); margin-bottom:20px; }
+.form-row{
+  display:flex; flex-direction:column; gap:3px;
+  padding:16px 0; border-bottom:1px solid var(--line);
+}
+.form-row:first-of-type{ border-top:1px solid var(--line); }
+.form-year{ font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+.form-school{ font-size:15px; font-weight:700; letter-spacing:-.2px; }
+.form-desc{ font-size:12px; color:var(--fg2); margin-top:2px; }
+
+/* ── CONTACT ── */
+.contact-wrap{ display:grid; grid-template-columns:1fr auto; align-items:end; gap:40px; }
+.contact-title{
+  font-family:var(--s); font-style:italic;
+  font-size:clamp(40px,7vw,88px); font-weight:300;
+  line-height:.95; letter-spacing:-2px;
+}
+.contact-title a{ color:var(--fg); text-decoration:none; border-bottom:1px solid rgba(255,212,249,.25); transition:border-color .2s; }
+.contact-title a:hover{ border-color:var(--fg); }
+.contact-right{ display:flex; flex-direction:column; gap:14px; padding-bottom:8px; }
+.contact-line{ display:flex; align-items:center; gap:10px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+.contact-line::before{ content:'→'; }
+.contact-line a{ color:var(--fg2); text-decoration:none; transition:color .2s; }
+.contact-line a:hover{ color:var(--fg); }
+
+footer{ position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center; padding:18px 40px; }
+.f{ font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{animation:fadeUp .5s .1s both}
+.hero-title{animation:fadeUp .6s .2s both}
+.hero-bottom{animation:fadeUp .5s .35s both}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav>
+  <div class="nav-logo">Prénom Nom</div><!-- ← change -->
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#projects">Projets</a>
+      <a href="#about">À propos</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-status"><div class="nav-dot"></div>Disponible</div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-tag">Graphiste DA — Branding &amp; Motion</div>
+    <h1 class="hero-title">
+      Identités<br>visuelles
+      <strong>qui durent.</strong><!-- ← texte plein, pas de stroke -->
+    </h1>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-scroll-hint">Défiler</div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Localisation</div>
+      <div class="hero-cell-value">Paris, FR</div><!-- ← change -->
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Disponibilité</div>
+      <div class="hero-cell-value">Été 2025</div><!-- ← change -->
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Spécialité</div>
+      <div class="hero-cell-value">Branding · Motion</div>
+    </div>
+  </div>
+</div>
+
+<div class="deco-line"><span></span></div>
+
+<!-- ═══ PROJETS ═══
+     Pour ajouter ton visuel : remplace le src="" de chaque <img>
+     par le chemin vers ton image, ex: src="images/projet1.jpg"
+     Crée un dossier "images/" à côté du fichier index.html
+═══ -->
+<section id="projects">
+  <div class="s-header">
+    <div class="s-num">01 — 05</div>
+    <div class="s-label">Projets sélectionnés</div>
+  </div>
+
+  <div class="projects-wrap">
+    <div class="projects-list">
+
+      <div class="proj" data-img="" data-label="Branding · 2025"><!-- data-img="images/volta.jpg" -->
+        <div class="proj-num">(01)</div>
+        <div class="proj-info">
+          <div class="proj-title">Volta — Identité de marque</div><!-- ← change -->
+          <div class="proj-meta"><span>Branding</span><span>2025</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="ptag">Logo</span><span class="ptag">Guidelines</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="proj" data-img="" data-label="Packaging · 2024">
+        <div class="proj-num">(02)</div>
+        <div class="proj-info">
+          <div class="proj-title">Mori — Packaging cosmétique</div><!-- ← change -->
+          <div class="proj-meta"><span>Packaging · Print</span><span>2024</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="ptag">Packaging</span><span class="ptag">DA</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="proj" data-img="" data-label="Identité · 2024">
+        <div class="proj-num">(03)</div>
+        <div class="proj-info">
+          <div class="proj-title">Arco — Festival de design</div><!-- ← change -->
+          <div class="proj-meta"><span>Identité · Signalétique</span><span>2024</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="ptag">Affiche</span><span class="ptag">Print</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="proj" data-img="" data-label="Motion · 2024">
+        <div class="proj-num">(04)</div>
+        <div class="proj-info">
+          <div class="proj-title">Expérimentation typographique</div><!-- ← change -->
+          <div class="proj-meta"><span>Motion · Typo</span><span>2024</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="ptag">After Effects</span><span class="ptag">Personnel</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="proj" data-img="" data-label="Branding · 2023">
+        <div class="proj-num">(05)</div>
+        <div class="proj-info">
+          <div class="proj-title">Projet cinq</div><!-- ← change -->
+          <div class="proj-meta"><span>Branding</span><span>2023</span></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span class="ptag">Identité</span><span class="ptag">Digital</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- cadre preview -->
+    <div class="preview-box" id="preview">
+      <div class="preview-placeholder">
+        <div class="preview-placeholder-icon">⊞</div>
+        <span>Survoler un projet</span>
+      </div>
+      <img id="preview-img" src="" alt="">
+      <div class="preview-label" id="preview-label"></div>
+    </div>
+  </div>
+</section>
+
+<div class="deco-line"><span></span></div>
+
+<!-- ═══ À PROPOS ═══ -->
+<section id="about">
+  <div class="s-header">
+    <div class="s-num">02</div>
+    <div class="s-label">À propos</div>
+  </div>
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-statement">
+        Je conçois des identités visuelles qui ont une raison d'être.
+      </div><!-- ← change -->
+      <p class="about-body">
+        Étudiant·e en 2e année de graphisme, mon travail s'inscrit dans un univers clean et fonctionnel — proche des univers Nothing, Fairphone ou Braun, là où la forme suit vraiment la fonction.
+      </p><!-- ← change -->
+      <p class="about-body">
+        Je développe ma pratique motion en parallèle, avec la conviction que l'animation doit servir le système de marque, pas le décorer.
+      </p>
+    </div>
+    <div class="about-right">
+      <!-- ← CHANGEMENT : section formation à la place des skill bars -->
+      <div class="formation">
+        <div class="formation-title">Formation</div>
+        <div class="form-row">
+          <div class="form-year">2023 — En cours</div>
+          <div class="form-school">École Nationale Supérieure des Arts</div><!-- ← change -->
+          <div class="form-desc">DN MADE mention Graphisme · Paris</div><!-- ← change -->
+        </div>
+        <div class="form-row">
+          <div class="form-year">2021 — 2023</div>
+          <div class="form-school">Lycée X</div><!-- ← change -->
+          <div class="form-desc">Baccalauréat Arts Appliqués · mention Bien</div><!-- ← change -->
+        </div>
+        <div class="form-row">
+          <div class="form-year">Logiciels</div>
+          <div class="form-school" style="font-size:13px;font-weight:500;margin-top:2px">Illustrator · Photoshop · InDesign · After Effects · Figma</div><!-- ← change -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="deco-line"><span></span></div>
+
+<section id="contact">
+  <div class="s-header">
+    <div class="s-num">03</div>
+    <div class="s-label">Contact</div>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-title">
+      Travaillons<br>ensemble —<br>
+      <a href="mailto:toi@email.com">toi@email.com</a><!-- ← change -->
+    </div>
+    <div class="contact-right">
+      <div class="contact-line">Paris, France</div>
+      <div class="contact-line">Disponible stages &amp; projets</div>
+      <div class="contact-line"><a href="#">Behance</a></div><!-- ← ajoute ton lien -->
+      <div class="contact-line"><a href="#">LinkedIn</a></div><!-- ← ajoute ton lien -->
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f">Prénom Nom © 2025</div><!-- ← change -->
+  <div class="f">Graphiste DA — Paris</div>
+</footer>
+
+<script>
+// ── CURSEUR — lag réduit (facteur .18 au lieu de .12) ──
+const cur=document.getElementById('cur');
+const ring=document.getElementById('cur-r');
+let mx=window.innerWidth/2, my=window.innerHeight/2;
+let rx=mx, ry=my;
+
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+
+(function loop(){
+  rx+=(mx-rx)*.22; ry+=(my-ry)*.22; // ← .22 = plus réactif
+  ring.style.left=Math.round(rx)+'px';
+  ring.style.top=Math.round(ry)+'px';
+  requestAnimationFrame(loop);
+})();
+
+document.querySelectorAll('a,.proj,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ cur.classList.add('h'); ring.classList.add('h'); });
+  el.addEventListener('mouseleave',()=>{ cur.classList.remove('h'); ring.classList.remove('h'); });
+});
+
+// ── PREVIEW PROJETS ──
+const img=document.getElementById('preview-img');
+const lbl=document.getElementById('preview-label');
+const ph=document.querySelector('.preview-placeholder');
+
+document.querySelectorAll('.proj').forEach(p=>{
+  p.addEventListener('mouseenter',()=>{
+    const src=p.dataset.img;
+    const label=p.dataset.label||'';
+    lbl.textContent=label;
+    if(src){
+      img.src=src;
+      img.style.opacity='1';
+      ph.style.opacity='0';
+    } else {
+      // pas encore d'image : affiche juste le label
+      img.style.opacity='0';
+      ph.style.opacity='1';
+    }
+    lbl.style.opacity='1';
+  });
+  p.addEventListener('mouseleave',()=>{
+    lbl.style.opacity='0';
+  });
+});
+</script>
+</body>
+</html>
