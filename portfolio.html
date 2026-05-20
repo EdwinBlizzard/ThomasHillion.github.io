@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prénom Nom — Graphiste DA</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111;
+  --fg:#f5f5f0;
+  --fg2:rgba(245,245,240,0.45);
+  --fg3:rgba(245,245,240,0.1);
+  --accent:#d4ff00;
+  --accent2:rgba(212,255,0,0.12);
+  --serif:'Space Grotesk',sans-serif;
+  --mono:'Space Mono',monospace;
+  --r:3px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--serif);
+  font-size:14px;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 40px;
+  border-bottom:1px solid var(--fg3);
+  background:rgba(10,10,10,0.92);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;}
+.nav-links{display:flex;gap:32px;}
+.nav-links a{color:var(--fg2);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--fg);}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:120px 40px 60px;
+  position:relative;
+  border-bottom:1px solid var(--fg3);
+}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(var(--fg3) 1px,transparent 1px),
+    linear-gradient(90deg,var(--fg3) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;}
+.hero-title{font-size:clamp(42px,7vw,80px);font-weight:700;line-height:1.0;letter-spacing:-2px;margin-bottom:24px;}
+.hero-title em{font-style:normal;color:transparent;-webkit-text-stroke:1px rgba(245,245,240,0.3);}
+.hero-desc{max-width:440px;font-size:14px;color:var(--fg2);line-height:1.7;margin-bottom:40px;}
+.hero-meta{display:flex;gap:40px;align-items:flex-end;}
+.hero-meta-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);margin-bottom:4px;}
+.hero-meta-value{font-size:15px;font-weight:500;}
+.hero-scroll{
+  position:absolute;right:40px;bottom:60px;
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--fg2);writing-mode:vertical-rl;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-scroll::before{content:'';width:1px;height:40px;background:var(--fg3);}
+
+/* ── SECTIONS ── */
+section{padding:80px 40px;border-bottom:1px solid var(--fg3);}
+.section-header{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:48px;padding-bottom:16px;
+  border-bottom:1px solid var(--fg3);
+}
+.section-num{font-family:var(--mono);font-size:10px;color:var(--fg2);letter-spacing:2px;}
+.section-title{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--fg2);}
+
+/* ── PROJECTS ── */
+.projects-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--fg3);}
+.project-card{
+  background:var(--bg);padding:32px;cursor:pointer;
+  transition:background .2s;position:relative;overflow:hidden;
+}
+.project-card:hover{background:var(--bg2);}
+.project-card:hover .project-arrow{transform:translate(4px,-4px);}
+.project-thumb{
+  height:200px;border-radius:var(--r);margin-bottom:24px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+/* ↓↓ MODIFIE CES COULEURS pour chaque projet ↓↓ */
+.thumb-1{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);}
+.thumb-2{background:linear-gradient(135deg,#0f1a0f 0%,#1a2e1a 100%);}
+.thumb-3{background:linear-gradient(135deg,#1a0f0f 0%,#2e1a1a 100%);}
+.thumb-4{background:linear-gradient(135deg,#0f0f1a 0%,#1a1a2e 100%);}
+.thumb-inner{font-family:var(--mono);font-size:36px;font-weight:700;color:rgba(255,255,255,0.07);letter-spacing:-2px;}
+.thumb-tag{
+  position:absolute;bottom:12px;left:12px;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  background:var(--accent2);color:var(--accent);
+  padding:4px 10px;border-radius:100px;
+  border:1px solid rgba(212,255,0,0.25);
+}
+.project-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.project-title{font-size:17px;font-weight:700;letter-spacing:-0.5px;}
+.project-arrow{font-size:16px;color:var(--fg2);transition:transform .25s cubic-bezier(.34,1.56,.64,1);}
+.project-desc{font-size:13px;color:var(--fg2);line-height:1.6;}
+.project-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.ptag{
+  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  border:1px solid var(--fg3);border-radius:100px;padding:3px 10px;color:var(--fg2);
+}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.about-big{font-size:clamp(26px,3.5vw,38px);font-weight:700;letter-spacing:-1px;line-height:1.15;margin-bottom:24px;}
+.about-big span{color:transparent;-webkit-text-stroke:1px rgba(245,245,240,0.3);}
+.about-text{font-size:14px;color:var(--fg2);line-height:1.8;margin-bottom:16px;}
+.skill-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--fg3);}
+.skill-name{font-size:13px;font-weight:500;}
+.skill-bar{width:120px;height:2px;background:var(--fg3);border-radius:1px;overflow:hidden;}
+.skill-fill{height:100%;background:var(--accent);border-radius:1px;}
+.skill-level{font-family:var(--mono);font-size:10px;color:var(--fg2);letter-spacing:1px;}
+
+/* ── CONTACT ── */
+.contact-big{font-size:clamp(36px,6vw,68px);font-weight:700;letter-spacing:-2px;line-height:1.0;margin-bottom:40px;}
+.contact-big a{color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent);transition:opacity .2s;}
+.contact-big a:hover{opacity:.7;}
+.contact-meta{display:flex;gap:40px;font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);}
+
+/* ── FOOTER ── */
+footer{padding:24px 40px;display:flex;justify-content:space-between;align-items:center;}
+.footer-left{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);}
+.footer-right{font-family:var(--mono);font-size:10px;color:var(--fg2);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-eyebrow{animation:fadeUp .6s .1s both;}
+.hero-title{animation:fadeUp .6s .2s both;}
+.hero-desc{animation:fadeUp .6s .3s both;}
+.hero-meta{animation:fadeUp .6s .4s both;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     NAV — change "Prénom Nom"
+═══════════════════════════════ -->
+<nav>
+  <div class="nav-logo">Prénom Nom</div>
+  <div class="nav-links">
+    <a href="#projects">Projets</a>
+    <a href="#about">À propos</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-dot" title="Disponible"></div>
+</nav>
+
+<!-- ═══════════════════════════════
+     HERO — modifie le titre et la desc
+═══════════════════════════════ -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Graphiste DA — Branding &amp; Motion</div>
+  <h1 class="hero-title">Designed<br>with <em>purpose.</em></h1>
+  <p class="hero-desc">
+    Je conçois des identités visuelles cohérentes et des systèmes de marque qui ont du sens.
+    Fin de 2e année — disponible pour des projets et stages.
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Localisation</div>
+      <div class="hero-meta-value">Paris, FR</div> <!-- ← change ici -->
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Disponibilité</div>
+      <div class="hero-meta-value">Été 2025</div> <!-- ← change ici -->
+    </div>
+    <div class="hero-meta-item">
+      <div class="hero-meta-label">Spécialité</div>
+      <div class="hero-meta-value">Branding · Motion</div>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</div>
+
+<!-- ═══════════════════════════════
+     PROJETS — remplace par les tiens
+     Pour les visuels : remplace la div .thumb
+     par <img src="ton-image.jpg" style="width:100%;height:100%;object-fit:cover">
+═══════════════════════════════ -->
+<section id="projects">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">Projets sélectionnés</div>
+  </div>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-thumb thumb-1">
+        <div class="thumb-inner">VOLTA</div>  <!-- ← remplace par ton image -->
+        <div class="thumb-tag">Branding</div>
+      </div>
+      <div class="project-header">
+        <div class="project-title">Volta — Identité de marque</div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-desc">Système d'identité complet pour une startup de mobilité électrique. Logo, typographie, palette, guidelines.</div>
+      <div class="project-tags">
+        <span class="ptag">Illustrator</span>
+        <span class="ptag">Brand System</span>
+        <span class="ptag">2025</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-thumb thumb-2">
+        <div class="thumb-inner">MORI</div>
+        <div class="thumb-tag">Packaging</div>
+      </div>
+      <div class="project-header">
+        <div class="project-title">Mori — Packaging cosmétique</div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-desc">Direction artistique et packaging pour une ligne de cosmétiques naturels. Identité sobre et sensorielle.</div>
+      <div class="project-tags">
+        <span class="ptag">Photoshop</span>
+        <span class="ptag">Packaging</span>
+        <span class="ptag">Print</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-thumb thumb-3">
+        <div class="thumb-inner">TYPE</div>
+        <div class="thumb-tag">Typographie</div>
+      </div>
+      <div class="project-header">
+        <div class="project-title">Expérimentation typographique</div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-desc">Projet personnel de recherche autour de la typographie cinétique et ses applications éditoriales.</div>
+      <div class="project-tags">
+        <span class="ptag">After Effects</span>
+        <span class="ptag">Motion</span>
+        <span class="ptag">Personnel</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-thumb thumb-4">
+        <div class="thumb-inner">ARCO</div>
+        <div class="thumb-tag">Branding</div>
+      </div>
+      <div class="project-header">
+        <div class="project-title">Arco — Festival de design</div>
+        <div class="project-arrow">↗</div>
+      </div>
+      <div class="project-desc">Création de l'identité visuelle d'un festival étudiant de design : affiche, signalétique, réseaux sociaux.</div>
+      <div class="project-tags">
+        <span class="ptag">Indesign</span>
+        <span class="ptag">Affiche</span>
+        <span class="ptag">Signalétique</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     À PROPOS — parle de toi
+═══════════════════════════════ -->
+<section id="about">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">À propos</div>
+  </div>
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-big">Design <span>fonctionnel,</span><br>esthétique assumée.</div>
+      <p class="about-text">
+        Étudiant·e en 2e année de graphisme, je construis des identités visuelles qui ont une raison d'être.
+        Inspiré par les univers de Nothing, Fairphone ou Braun — là où la forme suit vraiment la fonction.
+      </p>
+      <p class="about-text">
+        Je cherche à développer ma pratique motion en parallèle, avec l'idée que l'animation doit servir
+        le système de marque, pas le décorer.
+      </p>
+    </div>
+    <div class="about-right">
+      <!-- ↓ Ajuste les % selon ton niveau réel ↓ -->
+      <div class="skill-row">
+        <span class="skill-name">Branding & Identité</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+        <span class="skill-level">Avancé</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Direction artistique</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        <span class="skill-level">Avancé</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Typographie</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+        <span class="skill-level">Avancé</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">After Effects</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:45%"></div></div>
+        <span class="skill-level">Intermédiaire</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Motion Design</span>
+        <div class="skill-bar"><div class="skill-fill" style="width:40%"></div></div>
+        <span class="skill-level">En cours</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     CONTACT — change l'email
+═══════════════════════════════ -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Contact</div>
+  </div>
+  <div class="contact-big">
+    Travaillons<br>ensemble —<br>
+    <a href="mailto:toi@email.com">toi@email.com</a> <!-- ← change ici -->
+  </div>
+  <div class="contact-meta">
+    <span>Paris, France</span>
+    <span>Disponible pour stages &amp; projets</span>
+    <span>LinkedIn · Behance</span> <!-- ← ajoute tes liens -->
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">Prénom Nom © 2025</div>
+  <div class="footer-right">Graphiste DA — Paris</div>
+</footer>
+
+</body>
+</html>
