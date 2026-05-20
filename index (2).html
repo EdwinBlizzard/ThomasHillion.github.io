@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prénom Nom — Graphiste DA</title>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;500;600;700;900&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#091D20;
+  --bg2:#0d2528;
+  --fg:#FFD4F9;
+  --fg2:rgba(255,212,249,0.4);
+  --fg3:rgba(255,212,249,0.08);
+  --fg4:rgba(255,212,249,0.03);
+  --line:rgba(255,212,249,0.12);
+  --g:'Darker Grotesque',sans-serif;
+  --s:'Spectral',serif;
+}
+
+*{ cursor: none !important; }
+#cursor{
+  position:fixed; z-index:9999; pointer-events:none;
+  width:6px; height:6px;
+  background:var(--fg);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .15s, height .15s;
+}
+#cursor-ring{
+  position:fixed; z-index:9998; pointer-events:none;
+  width:28px; height:28px;
+  border:1px solid rgba(255,212,249,0.35);
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+}
+#cursor.hover{ width:3px; height:3px; }
+#cursor-ring.hover{ width:44px; height:44px; border-color:rgba(255,212,249,0.7); }
+
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--bg);
+  color:var(--fg);
+  font-family:var(--g);
+  font-size:15px;
+  line-height:1.5;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--fg3) 1px, transparent 1px),
+    linear-gradient(90deg, var(--fg3) 1px, transparent 1px);
+  background-size:24px 24px;
+  opacity:.35;
+}
+
+/* NAV */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:0 40px; height:52px;
+  border-bottom:1px solid var(--line);
+  background:rgba(9,29,32,0.9);
+  backdrop-filter:blur(16px);
+}
+.nav-logo{ font-family:var(--g); font-size:12px; font-weight:700; letter-spacing:4px; text-transform:uppercase; }
+.nav-right{ display:flex; align-items:center; gap:36px; }
+.nav-links{ display:flex; gap:28px; }
+.nav-links a{ font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); text-decoration:none; transition:color .2s; }
+.nav-links a:hover{ color:var(--fg); }
+.nav-status{ display:flex; align-items:center; gap:7px; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--fg2); }
+.nav-dot{ width:5px; height:5px; border-radius:50%; background:var(--fg); box-shadow:0 0 6px var(--fg); animation:blink 2.4s infinite; }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* HERO */
+.hero{
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:grid; grid-template-rows:1fr auto;
+  padding-top:52px;
+  border-bottom:1px solid var(--line);
+}
+.hero-main{ display:flex; flex-direction:column; justify-content:flex-end; padding:60px 40px 0; }
+.hero-tag{
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--fg2); margin-bottom:28px;
+  display:flex; align-items:center; gap:12px;
+}
+.hero-tag::before{ content:''; display:block; width:24px; height:1px; background:var(--fg2); }
+
+.hero-title{
+  font-family:var(--s);
+  font-size:clamp(52px,8vw,100px);
+  font-weight:300; font-style:italic;
+  line-height:.95; letter-spacing:-2px;
+  margin-bottom:0;
+}
+/* titre en gras non-italique, pleine couleur, sans stroke */
+.hero-title strong{
+  font-family:var(--g);
+  font-style:normal;
+  font-weight:900;
+  letter-spacing:-4px;
+  color:var(--fg);
+  display:block;
+}
+
+.hero-bottom{
+  display:grid; grid-template-columns:1fr 1fr 1fr 1fr;
+  border-top:1px solid var(--line);
+  margin-top:48px;
+}
+.hero-cell{ padding:20px 40px; border-right:1px solid var(--line); }
+.hero-cell:last-child{ border-right:none; }
+.hero-cell-label{ font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2); margin-bottom:6px; }
+.hero-cell-value{ font-size:14px; font-weight:600; letter-spacing:.5px; }
+.hero-scroll-hint{
+  font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2);
+  display:flex; align-items:center; gap:8px; padding:20px 40px;
+  border-right:1px solid var(--line);
+  animation:scrollhint 2s infinite;
+}
+@keyframes scrollhint{0%,100%{opacity:.4}50%{opacity:1}}
+.hero-scroll-hint::after{ content:'↓'; font-size:12px; }
+
+/* DECO LINE */
+.deco-line{ position:relative; z-index:1; height:1px; background:var(--line); overflow:hidden; }
+.deco-line-inner{ height:1px; background:linear-gradient(90deg,transparent,var(--fg),transparent); width:200px; animation:scanline 4s linear infinite; }
+@keyframes scanline{ from{margin-left:-200px} to{margin-left:100%} }
+
+/* SECTION */
+section{ position:relative; z-index:1; padding:72px 40px; border-bottom:1px solid var(--line); }
+.s-header{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:56px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+.s-num{ font-size:9px; letter-spacing:2px; color:var(--fg2); font-weight:600; }
+.s-label{ font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2); }
+
+/* PROJECTS */
+.projects-list{ display:flex; flex-direction:column; gap:0; }
+.proj{
+  display:grid; grid-template-columns:80px 1fr 260px auto;
+  align-items:center; gap:32px;
+  padding:0;
+  border-bottom:1px solid var(--line);
+  position:relative;
+  overflow:hidden;
+  transition:background .25s;
+}
+.proj::before{
+  content:''; position:absolute; left:-40px; right:-40px; top:0; bottom:0;
+  background:var(--fg4); opacity:0; transition:opacity .25s;
+}
+.proj:hover::before{ opacity:1; }
+.proj:hover .proj-arrow{ transform:translate(3px,-3px); color:var(--fg); }
+.proj:hover .proj-num{ color:var(--fg); }
+.proj:hover .proj-thumb-wrap{ opacity:1; }
+
+.proj-num{ font-size:10px; letter-spacing:2px; color:var(--fg2); font-weight:600; transition:color .2s; white-space:nowrap; padding:28px 0 28px 0; }
+.proj-info{ display:flex; flex-direction:column; gap:5px; padding:28px 0; }
+.proj-title{ font-family:var(--g); font-size:22px; font-weight:700; letter-spacing:-0.5px; line-height:1; }
+.proj-meta{ display:flex; gap:16px; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--fg2); }
+
+/* PREVIEW THUMBNAIL */
+.proj-thumb-wrap{
+  width:220px; height:130px;
+  border:1px solid var(--line);
+  border-radius:3px;
+  overflow:hidden;
+  opacity:0;
+  transition:opacity .3s;
+  flex-shrink:0;
+  background:var(--bg2);
+  display:flex; align-items:center; justify-content:center;
+}
+/* ↓↓ remplace ce bloc par <img src="ton-image.jpg"> quand tu as tes visuels ↓↓ */
+.proj-thumb-placeholder{
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2);
+  position:relative; overflow:hidden;
+}
+.proj-thumb-placeholder::after{
+  content:'';
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 8px,
+    rgba(255,212,249,0.03) 8px,
+    rgba(255,212,249,0.03) 9px
+  );
+}
+
+.proj-tags{ display:flex; gap:8px; align-items:center; padding:28px 0; }
+.ptag{ font-size:9px; letter-spacing:1.5px; text-transform:uppercase; border:1px solid var(--line); border-radius:2px; padding:3px 10px; color:var(--fg2); }
+.proj-arrow{ font-size:16px; color:var(--fg2); transition:transform .2s, color .2s; margin-left:8px; }
+
+/* ABOUT */
+.about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:80px; }
+.about-left{}
+.about-statement{
+  font-family:var(--s); font-style:italic;
+  font-size:clamp(22px,3vw,32px); font-weight:300;
+  line-height:1.3; letter-spacing:-.5px;
+  margin-bottom:32px;
+}
+.about-body{ font-size:14px; color:var(--fg2); line-height:1.9; margin-bottom:18px; }
+.about-right{ padding-top:4px; }
+
+.about-block{ margin-bottom:36px; }
+.about-block-title{
+  font-size:9px; letter-spacing:2.5px; text-transform:uppercase; color:var(--fg2);
+  margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--line);
+}
+.about-item{ padding:11px 0; border-bottom:1px solid var(--line); }
+.about-item-main{ font-size:14px; font-weight:600; margin-bottom:3px; }
+.about-item-sub{ font-size:12px; color:var(--fg2); letter-spacing:.3px; }
+
+/* CONTACT */
+.contact-title{
+  font-family:var(--s); font-style:italic;
+  font-size:clamp(42px,7vw,88px); font-weight:300;
+  line-height:.95; letter-spacing:-2px;
+  margin-bottom:40px;
+}
+.contact-title a{ color:var(--fg); text-decoration:none; border-bottom:1px solid rgba(255,212,249,0.3); transition:border-color .2s; }
+.contact-title a:hover{ border-color:var(--fg); }
+.contact-meta{ display:flex; gap:40px; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+.contact-meta a{ color:var(--fg2); text-decoration:none; transition:color .2s; }
+.contact-meta a:hover{ color:var(--fg); }
+
+footer{ position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center; padding:18px 40px; }
+.f-l,.f-r{ font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hero-tag{animation:fadeUp .5s .1s both}
+.hero-title{animation:fadeUp .7s .2s both}
+.hero-bottom{animation:fadeUp .5s .4s both}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav>
+  <div class="nav-logo">Prénom Nom</div><!-- ← change -->
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#projects">Projets</a>
+      <a href="#about">À propos</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-status"><div class="nav-dot"></div>Disponible</div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-tag">Graphiste DA — Branding &amp; Motion</div>
+    <h1 class="hero-title">
+      Identités<br>visuelles
+      <strong>qui durent.</strong>
+    </h1>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-scroll-hint">Défiler</div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Localisation</div>
+      <div class="hero-cell-value">Paris, FR</div><!-- ← change -->
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Disponibilité</div>
+      <div class="hero-cell-value">Été 2025</div><!-- ← change -->
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Spécialité</div>
+      <div class="hero-cell-value">Branding · Motion</div>
+    </div>
+  </div>
+</div>
+
+<div class="deco-line"><div class="deco-line-inner"></div></div>
+
+<!-- ═══ PROJETS
+     Pour ajouter ton visuel, remplace la div .proj-thumb-placeholder par :
+     <img src="nom-de-ton-image.jpg" style="width:100%;height:100%;object-fit:cover">
+═══ -->
+<section id="projects">
+  <div class="s-header">
+    <div class="s-num">01 — 05</div>
+    <div class="s-label">Projets sélectionnés</div>
+  </div>
+  <div class="projects-list">
+
+    <div class="proj">
+      <div class="proj-num">(01)</div>
+      <div class="proj-info">
+        <div class="proj-title">Volta — Identité de marque</div><!-- ← change -->
+        <div class="proj-meta"><span>Branding</span><span>2025</span></div>
+      </div>
+      <div class="proj-thumb-wrap">
+        <div class="proj-thumb-placeholder">Visuel projet</div>
+        <!-- ↑ remplace par <img src="volta.jpg" style="width:100%;height:100%;object-fit:cover"> -->
+      </div>
+      <div class="proj-tags">
+        <span class="ptag">Logo</span><span class="ptag">Guidelines</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">(02)</div>
+      <div class="proj-info">
+        <div class="proj-title">Mori — Packaging cosmétique</div><!-- ← change -->
+        <div class="proj-meta"><span>Packaging · Print</span><span>2024</span></div>
+      </div>
+      <div class="proj-thumb-wrap">
+        <div class="proj-thumb-placeholder">Visuel projet</div>
+      </div>
+      <div class="proj-tags">
+        <span class="ptag">Packaging</span><span class="ptag">DA</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">(03)</div>
+      <div class="proj-info">
+        <div class="proj-title">Arco — Festival de design</div><!-- ← change -->
+        <div class="proj-meta"><span>Identité · Signalétique</span><span>2024</span></div>
+      </div>
+      <div class="proj-thumb-wrap">
+        <div class="proj-thumb-placeholder">Visuel projet</div>
+      </div>
+      <div class="proj-tags">
+        <span class="ptag">Affiche</span><span class="ptag">Print</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">(04)</div>
+      <div class="proj-info">
+        <div class="proj-title">Expérimentation typographique</div><!-- ← change -->
+        <div class="proj-meta"><span>Motion · Typo</span><span>2024</span></div>
+      </div>
+      <div class="proj-thumb-wrap">
+        <div class="proj-thumb-placeholder">Visuel projet</div>
+      </div>
+      <div class="proj-tags">
+        <span class="ptag">After Effects</span><span class="ptag">Personnel</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </div>
+
+    <div class="proj">
+      <div class="proj-num">(05)</div>
+      <div class="proj-info">
+        <div class="proj-title">Projet cinq</div><!-- ← change -->
+        <div class="proj-meta"><span>Branding</span><span>2023</span></div>
+      </div>
+      <div class="proj-thumb-wrap">
+        <div class="proj-thumb-placeholder">Visuel projet</div>
+      </div>
+      <div class="proj-tags">
+        <span class="ptag">Identité</span><span class="ptag">Digital</span>
+        <span class="proj-arrow">↗</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="deco-line"><div class="deco-line-inner"></div></div>
+
+<!-- ═══ À PROPOS ═══ -->
+<section id="about">
+  <div class="s-header">
+    <div class="s-num">02</div>
+    <div class="s-label">À propos</div>
+  </div>
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-statement">
+        Design fonctionnel,<br>esthétique assumée.
+      </div><!-- ← change, le texte est en Spectral italic -->
+      <p class="about-body">
+        Étudiant·e en 2e année de graphisme, je construis des identités visuelles qui ont une raison d'être. Inspiré par les univers de Nothing, Fairphone, Braun — là où la forme suit vraiment la fonction.
+      </p><!-- ← parle de toi -->
+      <p class="about-body">
+        Je développe ma pratique motion en parallèle, avec l'idée que l'animation doit servir le système de marque, pas le décorer.
+      </p>
+    </div>
+    <div class="about-right">
+
+      <!-- FORMATION -->
+      <div class="about-block">
+        <div class="about-block-title">Formation</div>
+        <div class="about-item">
+          <div class="about-item-main">BTS Communication Visuelle</div><!-- ← change -->
+          <div class="about-item-sub">École Nationale Supérieure — 2023 → en cours</div><!-- ← change -->
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Bac Arts Appliqués</div><!-- ← change -->
+          <div class="about-item-sub">Lycée XYZ — 2023</div><!-- ← change -->
+        </div>
+      </div>
+
+      <!-- OUTILS -->
+      <div class="about-block">
+        <div class="about-block-title">Outils</div>
+        <div class="about-item">
+          <div class="about-item-main">Suite Adobe</div>
+          <div class="about-item-sub">Illustrator · Photoshop · InDesign · After Effects</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Figma</div>
+          <div class="about-item-sub">Prototypage · UI</div>
+        </div>
+      </div>
+
+      <!-- LANGUES -->
+      <div class="about-block">
+        <div class="about-block-title">Langues</div>
+        <div class="about-item">
+          <div class="about-item-main">Français</div>
+          <div class="about-item-sub">Natif</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Anglais</div>
+          <div class="about-item-sub">Courant</div><!-- ← ajuste -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="deco-line"><div class="deco-line-inner"></div></div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="s-header">
+    <div class="s-num">03</div>
+    <div class="s-label">Contact</div>
+  </div>
+  <div class="contact-title">
+    Travaillons<br>ensemble —<br>
+    <a href="mailto:toi@email.com">toi@email.com</a><!-- ← change -->
+  </div>
+  <div class="contact-meta">
+    <span>Paris, France</span>
+    <span>Stages &amp; projets</span>
+    <a href="#">Behance</a><!-- ← ajoute ton lien -->
+    <a href="#">LinkedIn</a><!-- ← ajoute ton lien -->
+  </div>
+</section>
+
+<footer>
+  <div class="f-l">Prénom Nom © 2025</div><!-- ← change -->
+  <div class="f-r">Graphiste DA — Paris</div>
+</footer>
+
+<script>
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0, my=0, rx=0, ry=0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+
+// anneau plus réactif : lerp 0.22 au lieu de 0.12
+function animRing(){
+  rx += (mx - rx) * .22;
+  ry += (my - ry) * .22;
+  ring.style.left = Math.round(rx) + 'px';
+  ring.style.top  = Math.round(ry) + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, .proj, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+</script>
+</body>
+</html>
