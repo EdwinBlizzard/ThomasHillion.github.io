@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thomas Hillion — Graphiste DA</title>
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;500;600;700;900&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ─────────────────────────────────────
+   RESET & VARIABLES
+───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:    #091D20;
+  --bg2:   #0d2528;
+  --fg:    #FFD4F9;
+  --fg2:   rgba(255,212,249,.4);
+  --fg3:   rgba(255,212,249,.08);
+  --fg4:   rgba(255,212,249,.03);
+  --line:  rgba(255,212,249,.12);
+  --g: 'Darker Grotesque', sans-serif;
+  --s: 'Spectral', serif;
+  --ease: cubic-bezier(.4,0,.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--g);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* pixel grid */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--fg3) 1px, transparent 1px),
+    linear-gradient(90deg, var(--fg3) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: .35;
+}
+
+/* ─────────────────────────────────────
+   CURSEUR
+───────────────────────────────────── */
+* { cursor: none !important; }
+
+#cur, #cur-ring {
+  position: fixed; z-index: 9999; pointer-events: none;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+#cur {
+  width: 6px; height: 6px;
+  background: var(--fg);
+  transition: width .15s, height .15s;
+}
+#cur-ring {
+  width: 28px; height: 28px;
+  border: 1px solid rgba(255,212,249,.35);
+  z-index: 9998;
+  transition: width .2s var(--ease), height .2s var(--ease), border-color .2s;
+}
+body.hovering #cur        { width: 3px; height: 3px; }
+body.hovering #cur-ring   { width: 44px; height: 44px; border-color: rgba(255,212,249,.7); }
+
+/* ─────────────────────────────────────
+   NAV
+───────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 52px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(9,29,32,.9);
+  backdrop-filter: blur(16px);
+}
+.nav-logo {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 4px; text-transform: uppercase;
+}
+.nav-right { display: flex; align-items: center; gap: 36px; }
+.nav-links  { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--fg2); text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-status {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg2);
+}
+.nav-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--fg); box-shadow: 0 0 6px var(--fg);
+  animation: blink 2.4s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ─────────────────────────────────────
+   HERO
+───────────────────────────────────── */
+.hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: grid; grid-template-rows: 1fr auto;
+  padding-top: 52px;
+  border-bottom: 1px solid var(--line);
+}
+.hero-main {
+  display: grid;
+  grid-template-columns: 1fr 340px; /* ← largeur colonne photo */
+  align-items: flex-end;
+  gap: 48px;
+  padding: 60px 40px 0;
+}
+.hero-text { display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* cadre photo */
+.hero-photo {
+  width: 100%;
+  height: 420px;               /* ← hauteur du cadre */
+  /* border: 1px solid var(--line); */
+  border-radius: 3px;
+  overflow: hidden;
+  align-self: flex-end;
+}
+.hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top; /* ← ajuste pour cadrer sur le visage */
+  display: block;
+  transition: opacity .4s ease;
+  transform: scaleX(-1);
+}
+.hero-photo:hover img {
+  opacity: 0.3; /* ← intensité du fade au survol, 0=invisible 1=normal */
+}
+.hero-tag {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--fg2); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-tag::before { content:''; width: 24px; height: 1px; background: var(--fg2); }
+
+.hero-title {
+  font-family: var(--s);
+  font-size: clamp(52px, 8vw, 100px);
+  font-weight: 300; font-style: italic;
+  line-height: .95; letter-spacing: -2px;
+}
+.hero-title strong {
+  font-family: var(--g);
+  font-style: normal; font-weight: 500;
+  letter-spacing: -4px; color: var(--fg);
+  display: block;
+}
+
+.hero-bottom {
+  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+  border-top: 1px solid var(--line);
+  margin-top: 48px;
+}
+.hero-scroll {
+  padding: 20px 40px;
+  border-right: 1px solid var(--line);
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--fg2);
+  display: flex; align-items: center; gap: 8px;
+  animation: pulse 2s infinite;
+}
+.hero-scroll::after { content: '↓'; font-size: 12px; }
+@keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+.hero-cell {
+  padding: 20px 40px;
+  border-right: 1px solid var(--line);
+}
+.hero-cell:last-child { border-right: none; }
+.hero-cell-label {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--fg2); margin-bottom: 6px;
+}
+.hero-cell-value { font-size: 14px; font-weight: 600; letter-spacing: .5px; }
+
+/* ─────────────────────────────────────
+   DECO LINE
+───────────────────────────────────── */
+.deco-line {
+  position: relative; z-index: 1;
+  height: 1px; background: var(--line); overflow: hidden;
+}
+.deco-line span {
+  display: block; height: 1px; width: 200px;
+  background: linear-gradient(90deg, transparent, var(--fg), transparent);
+  animation: scan 4s linear infinite;
+}
+@keyframes scan { from{margin-left:-200px} to{margin-left:100%} }
+
+/* ─────────────────────────────────────
+   SECTION SHELL
+───────────────────────────────────── */
+section {
+  position: relative; z-index: 1;
+  padding: 72px 40px;
+  border-bottom: 1px solid var(--line);
+}
+.s-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 56px; padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.s-num   { font-size: 9px; letter-spacing: 2px; color: var(--fg2); font-weight: 600; }
+.s-label { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--fg2); }
+
+/* ─────────────────────────────────────
+   PROJETS — LISTE + ACCORDÉON
+───────────────────────────────────── */
+.projects-list { display: flex; flex-direction: column; }
+
+/* ── ligne principale ── */
+.proj-row {
+  border-bottom: 1px solid var(--line);
+}
+
+.proj-trigger {
+  display: grid;
+  grid-template-columns: 80px 1fr 240px auto;
+  align-items: center;
+  gap: 32px;
+  padding: 24px 0;
+  position: relative;
+  transition: background .2s;
+}
+.proj-trigger::before {
+  content: '';
+  position: absolute; left: -40px; right: -40px; top: 0; bottom: 0;
+  background: var(--fg4); opacity: 0;
+  transition: opacity .2s;
+  pointer-events: none;
+}
+.proj-trigger:hover::before             { opacity: 1; }
+.proj-trigger:hover .proj-num           { color: var(--fg); }
+.proj-trigger:hover .proj-thumb-wrap    { opacity: 1; }
+.proj-trigger:hover .proj-indicator     { color: var(--fg); }
+
+/* numéro */
+.proj-num {
+  font-size: 10px; letter-spacing: 2px; color: var(--fg2);
+  font-weight: 600; transition: color .2s; white-space: nowrap;
+}
+
+/* infos */
+.proj-info { display: flex; flex-direction: column; gap: 5px; }
+.proj-title {
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -.5px; line-height: 1;
+}
+.proj-meta {
+  display: flex; gap: 16px;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--fg2);
+}
+
+/* miniature hover */
+.proj-thumb-wrap {
+  width: 220px; height: 130px;
+  border: 1px solid var(--line); border-radius: 3px;
+  overflow: hidden; opacity: 0;
+  transition: opacity .3s;
+  background: var(--bg2);
+  flex-shrink: 0;
+}
+.proj-thumb-wrap img,
+.proj-thumb-wrap video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+
+/* indicateur ouverture */
+.proj-indicator {
+  font-size: 18px; color: var(--fg2);
+  transition: transform .35s var(--ease), color .2s;
+  line-height: 1; user-select: none;
+}
+.proj-row.open .proj-indicator { transform: rotate(45deg); color: var(--fg); }
+
+/* tags dans le trigger — cachés quand ouvert pour pas surcharger */
+.proj-tags {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 8px;
+}
+.ptag {
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  border: 1px solid var(--line); border-radius: 2px;
+  padding: 3px 10px; color: var(--fg2);
+}
+
+/* ── accordéon ── */
+.proj-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .4s var(--ease);
+}
+.proj-row.open .proj-panel {
+  grid-template-rows: 1fr;
+}
+.proj-panel-inner {
+  overflow: hidden;
+}
+.proj-panel-content {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 48px;
+  padding: 0 0 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+  margin-top: 0;
+}
+
+/* galerie images dans le panneau */
+.proj-gallery {
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* conteneur commun — c'est ici que tu contrôles la taille max */
+.proj-gallery-item {
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg2);
+  display: flex;           /* centre la vidéo si plus petite que le conteneur */
+  justify-content: center;
+}
+
+/* image : toujours pleine largeur */
+.proj-gallery-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* vidéo : hauteur max fixe, largeur proportionnelle, jamais plus large que le bloc */
+.proj-gallery-item video {
+  height: 500px;           /* ← change cette valeur pour ajuster la hauteur */
+  width: auto;
+  max-width: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* infos détaillées */
+.proj-detail { display: flex; flex-direction: column; gap: 24px; padding-top: 4px; }
+
+.proj-detail-desc {
+  font-family: var(--g);   /* Darker Grotesque */
+  font-style: normal; font-size: 15px;
+}
+
+.proj-detail-block { display: flex; flex-direction: column; gap: 0; }
+.proj-detail-label {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--fg2); padding-bottom: 8px;
+  border-bottom: 1px solid var(--line); margin-bottom: 10px;
+}
+.proj-detail-value {
+  font-size: 13px; font-weight: 500; color: var(--fg);
+  line-height: 1.6;
+}
+
+.proj-detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+/* ─────────────────────────────────────
+   À PROPOS
+───────────────────────────────────── */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+
+.about-statement {
+  font-family: var(--s); font-style: italic;
+  font-size: clamp(22px, 3vw, 32px); font-weight: 300;
+  line-height: 1.3; letter-spacing: -.5px;
+  margin-bottom: 32px;
+}
+.about-body {
+  font-size: 16px; color: var(--fg2);
+  line-height: 1.3; margin-bottom: 18px;
+}
+
+.about-block { margin-bottom: 36px; }
+.about-block-title {
+  font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--fg2);
+  margin-bottom: 16px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.about-item { padding: 11px 0; border-bottom: 1px solid var(--line); }
+.about-item-main { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.about-item-sub  { font-size: 12px; color: var(--fg2); }
+
+/* ─────────────────────────────────────
+   CONTACT
+───────────────────────────────────── */
+.contact-title {
+  font-family: var(--s); font-style: italic;
+  font-size: clamp(42px, 7vw, 88px); font-weight: 300;
+  line-height: .95; letter-spacing: -2px;
+  margin-bottom: 40px;
+}
+.contact-title a {
+  color: var(--fg); text-decoration: none;
+  border-bottom: 1px solid rgba(255,212,249,.3);
+  transition: border-color .2s;
+}
+.contact-title a:hover { border-color: var(--fg); }
+
+.contact-meta {
+  display: flex; gap: 40px;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--fg2);
+}
+.contact-meta a { color: var(--fg2); text-decoration: none; transition: color .2s; }
+.contact-meta a:hover { color: var(--fg); }
+
+/* ─────────────────────────────────────
+   FOOTER
+───────────────────────────────────── */
+footer {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 40px;
+}
+.f-l, .f-r {
+  font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--fg2);
+}
+
+/* ─────────────────────────────────────
+   ANIMATIONS HERO
+───────────────────────────────────── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+.hero-tag    { animation: fadeUp .5s .1s both; }
+.hero-title  { animation: fadeUp .7s .2s both; }
+.hero-bottom { animation: fadeUp .5s .4s both; }
+
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <div class="nav-logo">Thomas Hillion</div>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="#projects">Projets</a>
+      <a href="#about">À propos</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="nav-status">
+      <div class="nav-dot"></div>
+      Disponible
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="hero-main">
+    <div class="hero-text">
+      <div class="hero-tag">Graphiste junior — Branding &amp; Motion</div>
+      <h1 class="hero-title">
+        Identités<br>visuelles
+        <strong>puissantes</strong>
+      </h1>
+    </div>
+    <div class="hero-photo">
+      <img src="image/matete.png"> <!-- ← remplace par ton nom de fichier -->
+       transform: scaleX(-1);
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-scroll">Défiler</div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Localisation</div>
+      <div class="hero-cell-value">Rennes, FR</div>
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Recherche une alternance</div>
+      <div class="hero-cell-value">scolarité 2026</div><!-- ← change -->
+    </div>
+    <div class="hero-cell">
+      <div class="hero-cell-label">Spécialité</div>
+      <div class="hero-cell-value">Branding · Motion</div>
+    </div>
+  </div>
+</div>
+
+<div class="deco-line"><span></span></div>
+
+<!-- ═══════════════ PROJETS ═══════════════
+
+  STRUCTURE D'UN PROJET :
+  ─────────────────────────────────────────
+  · proj-trigger  = ligne cliquable (numéro / titre / miniature hover / +)
+  · proj-panel    = accordéon qui s'ouvre
+      · proj-gallery  = colonne gauche, autant d'images/vidéos que tu veux
+      · proj-detail   = colonne droite, texte
+
+  MINIATURE HOVER (dans proj-thumb-wrap) :
+    <img src="image/monfichier.jpg">
+    ou <video src="image/monfichier.mp4" autoplay muted loop playsinline>
+
+  GALERIE (dans proj-gallery) :
+    <div class="proj-gallery-item">
+      <img src="image/monfichier.jpg">
+    </div>
+    Autant de blocs que nécessaire — ils s'empilent verticalement.
+
+════════════════════════════════════════ -->
+<section id="projects">
+  <div class="s-header">
+    <div class="s-num">01 — 05</div>
+    <div class="s-label">Projets sélectionnés</div>
+  </div>
+
+  <div class="projects-list">
+
+    <!-- ── PROJET 01 ── -->
+    <div class="proj-row">
+      <div class="proj-trigger">
+        <div class="proj-num">(01)</div>
+        <div class="proj-info">
+          <div class="proj-title">Hebdo — Mise en page et illustrations d'un journal</div><!-- ← change -->
+          <div class="proj-meta">
+            <span>Branding</span><span>2025</span>
+          </div>
+          <div class="proj-tags">
+            <span class="ptag">Mise en page</span>
+            <span class="ptag">Illustration</span>
+          </div>
+        </div>
+        <div class="proj-thumb-wrap">
+          <img src="image/hebdo.jpg"><!-- ← miniature hover -->
+        </div>
+        <div class="proj-indicator">+</div>
+      </div>
+      <div class="proj-panel">
+        <div class="proj-panel-inner">
+          <div class="proj-panel-content">
+            <div class="proj-gallery">
+              <!-- ↓ ajoute autant d'images que tu veux -->
+               <div class="proj-gallery-item"><img src="image/hebdo_mockup.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/hebdo.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/Hebdo-GM2-Thomas-Hillion-2.png"></div><!-- ← remplace par une 2e image si tu en as une -->
+            </div>
+            <div class="proj-detail">
+              <div class="proj-detail-desc">
+J’ai cherché à créer une identité forte pour ce journal hebdomadaire fictif, en m’inspirant des grands titres de presse du XIXᵉ siècle pour leurs hiérarchies complexes et leur approche fonctionnaliste de la mise en page. L’ambiance générale se veut lugubre, presque oppressante, avec des blocs de texte denses et de faux encarts publicitaires inquiétants. Les illustrations, réalisées à la main puis retravaillées numériquement, rythment la mise en page et renforcent l’identité visuelle du journal. L’ensemble repose sur une palette sombre, enrichie par des textures visant à vieillir le papier et accentuer l’aspect éditorial ancien.              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Année</div>
+                <div class="proj-detail-value">2025</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Outils</div>
+                <div class="proj-detail-value">Indesign · Photoshop</div><!-- ← change -->
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Catégories</div>
+                <div class="proj-detail-tags">
+                  <span class="ptag">Édition</span>
+                  <span class="ptag">Illustrations</span>
+                  <span class="ptag">Typograhie</span>
+                  <span class="ptag">Guidelines</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /proj-row 01 -->
+
+    <!-- ── PROJET 03 ── -->
+    <div class="proj-row">
+      <div class="proj-trigger">
+        <div class="proj-num">(03)</div>
+        <div class="proj-info">
+          <div class="proj-title">Pub AGR - Motion Design</div><!-- ← change -->
+          <div class="proj-meta">
+            <span>Animation</span><span>2026</span>
+          </div>
+          <div class="proj-tags">
+            <span class="ptag">Vidéo animé</span>
+            <span class="ptag">Projet professionnel</span>
+          </div>
+        </div>
+        <div class="proj-thumb-wrap">
+          <img src="image/motion_agr.jpg"><!-- ← change -->
+        </div>
+        <div class="proj-indicator">+</div>
+      </div>
+      <div class="proj-panel">
+        <div class="proj-panel-inner">
+          <div class="proj-panel-content">
+            <div class="proj-gallery">
+              <div class="proj-gallery-item">
+                <video src="image/FINAL.mp4" controls loop playsinline></video>
+              </div>
+            </div>
+            <div class="proj-detail">
+              <div class="proj-detail-desc">
+J’ai eu l’opportunité de réaliser une publicité pour mon école, dans le cadre d’un projet rémunéré, accompagné d’un binôme. Cette expérience m’a permis d’approfondir le processus de création en motion design, tant sur le plan du storytelling que dans la relation client et le travail en équipe.
+Le principal défit était de faire rentrer un grand nombres d'informations et de visuels en peu de temps, ce qui a nécessité une gestion du rythme serré mais nécessaire.             </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Année</div>
+                <div class="proj-detail-value">2026</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Outils</div>
+                <div class="proj-detail-value">After Effects </div><!-- ← change -->
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Catégories</div>
+                <div class="proj-detail-tags">
+                  <span class="ptag">Vidéo animé</span>
+                  <span class="ptag">Projet professionnel</span>
+                  <span class="ptag">Sound design</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /proj-row 03 -->
+
+    <!-- ── PROJET 04 ── -->
+    <div class="proj-row">
+      <div class="proj-trigger">
+        <div class="proj-num">(04)</div>
+        <div class="proj-info">
+          <div class="proj-title">Repair café - Identité visuelle</div><!-- ← change -->
+          <div class="proj-meta">
+            <span>Motion · Typo</span><span>2025</span>
+          </div>
+          <div class="proj-tags">
+            <span class="ptag">Branding</span>
+            <span class="ptag">Logotype</span>
+          </div>
+        </div>
+        <div class="proj-thumb-wrap">
+          <img src="image/repair_mockup_log.jpg"><!-- ← change, ou <img> -->
+        </div>
+        <div class="proj-indicator">+</div>
+      </div>
+      <div class="proj-panel">
+        <div class="proj-panel-inner">
+          <div class="proj-panel-content">
+            <div class="proj-gallery">
+              <div class="proj-gallery-item"><img src="image/repair_mockup.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/repair_mockup_affiche.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/repair_MOCKUP8CARTE.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/repair_mockup_box.jpg"></div>
+            </div>
+            <div class="proj-detail">
+              <div class="proj-detail-desc">
+La direction visuelle de l’entreprise fictive Kawa visait à fusionner l’univers du café et celui du vêtement, dans une logique de Repair Café. Le projet s’appuie sur des valeurs d’inclusivité et de durabilité. J’ai porté une attention particulière à la hiérarchisation de l’information et au choix de typographies accessibles et lisibles.              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Année</div>
+                <div class="proj-detail-value">2025</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Outils</div>
+                <div class="proj-detail-value">Illustrator</div>
+                <div class="proj-detail-value">Affinity Designer</div>
+                <div class="proj-detail-value">Photoshop</div>
+                <div class="proj-detail-value">Indesign</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Catégories</div>
+                <div class="proj-detail-tags">
+                  <span class="ptag">Logotype</span>
+                  <span class="ptag">Branding</span>
+                  <span class="ptag">Typographie</span>
+                  <span class="ptag">Design inclusif</span>
+                   <span class="ptag">Design system</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /proj-row 04 -->
+
+    <!-- ── PROJET 05 ── -->
+    <div class="proj-row">
+      <div class="proj-trigger">
+        <div class="proj-num">(05)</div>
+        <div class="proj-info">
+          <div class="proj-title">Alessi - Captation vidéo - Montage</div><!-- ← change -->
+          <div class="proj-meta">
+            <span>Vidéo</span><span>2025</span>
+          </div>
+          <div class="proj-tags">
+            <span class="ptag">Montage</span>
+            <span class="ptag">Digital</span>
+          </div>
+        </div>
+        <div class="proj-thumb-wrap">
+          <img src="image/agrume_image.jpg"><!-- ← change -->
+        </div>
+        <div class="proj-indicator">+</div>
+      </div>
+      <div class="proj-panel">
+        <div class="proj-panel-inner">
+          <div class="proj-panel-content">
+            <div class="proj-gallery">
+              <div class="proj-gallery-item"><video src="image/agrume.mp4" controls loop playsinline></video></div><!-- ← change -->
+            </div>
+            <div class="proj-detail">
+              <div class="proj-detail-desc">
+J’ai travaillé une colorimétrie chaude afin de mettre en valeur les fruits. Une attention particulière a été portée à la lumière et à la composition pour renforcer l’impact visuel de l’image. Le choix des cadrages associe fonctionnalité et intention graphique, avec des plans rapprochés mettant en avant certains détails afin de guider le regard.              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Année</div>
+                <div class="proj-detail-value">2025</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Outils</div>
+                <div class="proj-detail-value">Première Pro</div><!-- ← change -->
+                <div class="proj-detail-value">Iphone 16 pro</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Catégories</div>
+                <div class="proj-detail-tags">
+                  <span class="ptag">Montage</span>
+                  <span class="ptag">Digital</span>
+                  <span class="ptag">Colorimétrie</span>
+                  <span class="ptag">Sound design</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /proj-row 05 -->
+
+<!-- ── PROJET 02 ── -->
+    <div class="proj-row">
+      <div class="proj-trigger">
+        <div class="proj-num">(02)</div>
+        <div class="proj-info">
+          <div class="proj-title">Yaka Paris - Packaging</div><!-- ← change -->
+          <div class="proj-meta">
+            <span>Packaging · Print</span><span>2025</span>
+          </div>
+          <div class="proj-tags">
+            <span class="ptag">Packaging</span>
+            <span class="ptag">DA</span>
+          </div>
+        </div>
+        <div class="proj-thumb-wrap">
+          <img src="image/yaka_mockup_frog.jpg"><!-- ← change -->
+        </div>
+        <div class="proj-indicator">+</div>
+      </div>
+      <div class="proj-panel">
+        <div class="proj-panel-inner">
+          <div class="proj-panel-content">
+            <div class="proj-gallery">
+              <div class="proj-gallery-item"><img src="image/Laura_Thomas_Photo_d'ambiance.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/Laura_Thomas_packaging_frog.jpg"></div>
+              <div class="proj-gallery-item"><img src="image/Laura_Thomas_Présentation_Oral (1).jpeg"></div>
+            </div>
+            <div class="proj-detail">
+              <div class="proj-detail-desc">
+Projet en partenariat avec Yaka Paris autour de la création de nouveaux packagings pour leur gamme de produits de vernie pour enfants. En binôme, nous avons conçu deux propositions : l’une sur le thème de Noël, l’autre autour de la grenouille. Nos designs colorés et créatifs ont été sélectionnés par la marque pour leur originalité.
+J’ai particulièrement travaillé le character design du petit animal afin de le rendre à la fois amical et attractif, ainsi que la création d’un ensemble de symboles graphiques venant enrichir et habiller le packaging.              
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Année</div>
+                <div class="proj-detail-value">2025</div>
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Outils</div>
+                <div class="proj-detail-value">Illustrator · Photoshop · InDesign · Adobe dimension</div><!-- ← change -->
+              </div>
+              <div class="proj-detail-block">
+                <div class="proj-detail-label">Catégories</div>
+                <div class="proj-detail-tags">
+                  <span class="ptag">Packaging</span>
+                  <span class="ptag">Print</span>
+                  <span class="ptag">Photographie packshot</span>
+                  <span class="ptag">3D</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /proj-row 02 -->
+
+
+
+  </div>
+</section>
+
+<div class="deco-line"><span></span></div>
+
+<!-- ═══════════════ À PROPOS ═══════════════ -->
+<section id="about">
+  <div class="s-header">
+    <div class="s-num">02</div>
+    <div class="s-label">À propos</div>
+  </div>
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-statement">
+        Design fonctionnel,<br>esthétique assumée.
+      </div>
+      <p class="about-body">
+Étudiant en graphisme, curieux et touche-à-tout, 
+j’explore différents champs de la création visuelle, de l’illustration à au motion design en passant par l'édition. À l’aise avec l’informatique et les outils créatifs, 
+j’aime apprendre, tester et construire des projets visuellement cohérents, sensibles et adaptés à leur intention. 
+Mon approche mêle recherche technique et graphique.      
+    </div>
+    <div class="about-right">
+      <div class="about-block">
+        <div class="about-block-title">Formation</div>
+        <div class="about-item">
+          <div class="about-item-main">Bachelor Designer Graphique</div>
+          <div class="about-item-sub">AGR, l'école de l'image — 2023 → en cours</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Bac général et technologique</div>
+          <div class="about-item-sub">Lycée René Descartes</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Formation au dessin et à l'illustration</div>
+          <div class="about-item-sub">Association les couleurs de Nouvoitou</div>
+        </div>
+      </div>
+      <div class="about-block">
+        <div class="about-block-title">Outils</div>
+        <div class="about-item">
+          <div class="about-item-main">Suite Adobe</div>
+          <div class="about-item-sub">Illustrator · Photoshop · InDesign · After Effects</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Figma</div>
+          <div class="about-item-sub">Prototypage · UI</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Suite Canva</div>
+          <div class="about-item-sub">Affinity · Cavalry · Canva</div>
+        </div>
+      </div>
+      <div class="about-block">
+        <div class="about-block-title">Langues</div>
+        <div class="about-item">
+          <div class="about-item-main">Français</div>
+          <div class="about-item-sub">Voltaire : 630</div>
+        </div>
+        <div class="about-item">
+          <div class="about-item-main">Anglais</div>
+          <div class="about-item-sub">TOEIC : 755</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="deco-line"><span></span></div>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact">
+  <div class="s-header">
+    <div class="s-num">03</div>
+    <div class="s-label">Contact</div>
+  </div>
+  <div class="contact-title">
+    Travaillons<br>ensemble —<br>
+    <a href="mailto:thomas.hillion@agr.fr">thomas.hillion@agr.fr</a>
+  </div>
+  <div class="contact-meta">
+    <span>Rennes, France</span>
+    <span>Stages &amp; projets</span>
+    <a href="https://www.instagram.com/lebicviolet/">Instagram</a><!-- ← ajoute ton lien -->
+    <a href="">LinkedIn</a><!-- ← ajoute ton lien -->
+  </div>
+</section>
+
+<footer>
+  <div class="f-l">Thomas Hillion © 2025</div>
+  <div class="f-r">Graphiste DA — Rennes</div>
+</footer>
+
+<!-- ═══════════════ JS ═══════════════ -->
+<script>
+/* ── Curseur ── */
+const cur  = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0, my=0, rx=0, ry=0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top  = my + 'px';
+});
+
+(function animRing(){
+  rx += (mx - rx) * .22;
+  ry += (my - ry) * .22;
+  ring.style.left = Math.round(rx) + 'px';
+  ring.style.top  = Math.round(ry) + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('a, .proj-trigger, button').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+
+/* ── Accordéon projets ── */
+document.querySelectorAll('.proj-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const row = trigger.closest('.proj-row');
+    const isOpen = row.classList.contains('open');
+
+    // ferme tous les autres
+    document.querySelectorAll('.proj-row.open').forEach(r => r.classList.remove('open'));
+
+    // ouvre celui-ci sauf s'il était déjà ouvert
+    if (!isOpen) row.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>
