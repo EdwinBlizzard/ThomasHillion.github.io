@@ -355,6 +355,12 @@ section {
   display: block;
   object-fit: contain;
 }
+/* vidéo en ratio naturel — pleine largeur, hauteur automatique */
+.proj-gallery-item--video-native video {
+  height: auto;
+  width: 100%;
+  max-width: 100%;
+}
 
 /* infos détaillées */
 .proj-detail { display: flex; flex-direction: column; gap: 24px; padding-top: 4px; }
@@ -724,11 +730,13 @@ Le principal défit était de faire rentrer un grand nombres d'informations et d
         <div class="proj-panel-inner">
           <div class="proj-panel-content">
             <div class="proj-gallery">
-              <div class="proj-gallery-item">
-                <video src="image/video_web.mp4" controls loop playsinline></video>
-                  <img src="image/mockup_web.jpg">
-              </div>
-            </div>
+               <div class="proj-gallery-item proj-gallery-item--video-native">
+                   <video src="image/video_web.mp4" controls loop playsinline></video>
+                 </div>
+                 <div class="proj-gallery-item">
+                   <img src="image/mockup_web.jpg">
+                 </div>
+               </div>
             <div class="proj-detail">
               <div class="proj-detail-desc">
 J’ai eu l’opportunité de réaliser une publicité pour mon école, dans le cadre d’un projet rémunéré, accompagné d’un binôme. Cette expérience m’a permis d’approfondir le processus de création en motion design, tant sur le plan du storytelling que dans la relation client et le travail en équipe.
@@ -739,14 +747,14 @@ Le principal défit était de faire rentrer un grand nombres d'informations et d
               </div>
               <div class="proj-detail-block">
                 <div class="proj-detail-label">Outils</div>
-                <div class="proj-detail-value">After Effects </div><!-- ← change -->
+                <div class="proj-detail-value">Figma</div><!-- ← change -->
               </div>
               <div class="proj-detail-block">
                 <div class="proj-detail-label">Catégories</div>
                 <div class="proj-detail-tags">
-                  <span class="ptag">Vidéo animé</span>
-                  <span class="ptag">Projet professionnel</span>
-                  <span class="ptag">Sound design</span>
+                  <span class="ptag">Design web</span>
+                  <span class="ptag">UI</span>
+                  <span class="ptag">Branding</span>
                 </div>
               </div>
             </div>
