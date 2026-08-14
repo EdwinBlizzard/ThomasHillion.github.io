@@ -284,12 +284,19 @@ section {
 .proj-thumb-wrap video {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
+<div class="proj-gallery-item small">
+  <img src="image/monimage.jpg">
+</div>
 
 /* indicateur ouverture */
 .proj-indicator {
   font-size: 18px; color: var(--fg2);
   transition: transform .35s var(--ease), color .2s;
   line-height: 1; user-select: none;
+}
+.proj-gallery-item.small img {
+  max-height: 400px;   /* ← ajuste */
+  object-fit: cover;
 }
 .proj-row.open .proj-indicator { transform: rotate(45deg); color: var(--fg); }
 
@@ -941,8 +948,8 @@ J’ai particulièrement travaillé le character design du petit animal afin de 
           <div class="proj-panel-content">
             <div class="proj-gallery">
               <!-- ↓ ajoute autant d'images que tu veux -->
-               <div class="proj-gallery-item"><video src="image/affiche_film_EMC_Never_Dies.jpg"></div>
-              <div class="proj-gallery-item"><video src="image/portraitbandw.designjpg.jpg"></div>
+               <div class="proj-gallery-item.small img"><img src="image/affiche_film_EMC_Never_Dies.jpg"></div>
+              <div class="proj-gallery-item.small img"><img src="image/portraitbandw.designjpg.jpg"></div>
               <div class="proj-gallery-item"><img src="image/retouche6.jpg"></div>
               <div class="proj-gallery-item"><img src="image/affiche_laprevalaye_mockup.jpg"></div><!-- ← remplace par une 2e image si tu en as une -->
             </div>
