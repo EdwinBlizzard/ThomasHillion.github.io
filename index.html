@@ -292,11 +292,9 @@ section {
   line-height: 1; user-select: none;
 }
 .proj-gallery-item.small img {
-  height: 500px;           /* ← change cette valeur pour ajuster la hauteur */
-  width: auto;
-  max-width: 100%;
-  display: block;
-  object-fit: contain;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
 }
 .proj-row.open .proj-indicator { transform: rotate(45deg); color: var(--fg); }
 
@@ -939,7 +937,7 @@ J’ai particulièrement travaillé le character design du petit animal afin de 
       <div class="proj-trigger">
         <div class="proj-num">(+)</div>
          <div class="proj-info">
-          <div class="proj-title">et bien plus.</div><!-- ← change -->
+          <div class="proj-title">et bien plus...</div><!-- ← change -->
         </div>
         <div class="proj-indicator"></div>
       </div>
